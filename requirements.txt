@@ -1,0 +1,11 @@
+pyserial
+fastapi
+uvicorn
+python-multipart
+numpy
+opencv-python
+paddlepaddle
+paddleocr
+ultralytics
+torch
+torchvision
