@@ -1,6 +1,7 @@
+
 # Smart Car Park System
 
-A comprehensive smart car park system built using STM32 microcontroller and Raspberry Pi, with license plate recognition and automated barrier control.
+A comprehensive smart car park system built using STM32 microcontroller and Raspberry Pi, with license plate recognition using YOLOv8 and PaddleOCR, and automated barrier control.
 
 ## Project Overview
 
@@ -9,7 +10,7 @@ The Smart Car Park System automates vehicle entry/exit management using an STM32
 - LM393 sensor for vehicle detection
 - SG90 servo for barrier control
 - SSD1306 OLED display for user messages
-- Webcam for license plate recognition
+- Webcam for license plate recognition using YOLOv8 and PaddleOCR
 - SQLite database for registered plate storage
 - Web interface for managing license plates
 
@@ -69,7 +70,7 @@ The Smart Car Park System automates vehicle entry/exit management using an STM32
 ### Raspberry Pi Software
 - **`smart_car_park.py`**: Main script handling:
   - UART communication with STM32
-  - License plate detection with OpenCV and EasyOCR
+  - License plate detection using YOLOv8 for object detection and PaddleOCR for text recognition
   - SQLite database queries
   - Capacity tracking
 
@@ -123,7 +124,7 @@ Binary packet format:
    ```bash
    sudo apt update
    sudo apt install -y python3-pip libopencv-dev python3-opencv
-   pip3 install pyserial easyocr opencv-python flask
+   pip3 install pyserial ultralytics paddleocr paddlepaddle flask
    ```
 
 3. **Setup Scripts**:
@@ -141,14 +142,14 @@ Binary packet format:
 
 4. **Access Web Interface**:
    - Open a browser and navigate to: `http://<raspberry_pi_ip>:5000`
-   - Login with username: `admin`, password: `carpark2023`
+   - Login with username: `admin`, password: `admin`
 
 ## Usage Examples
 
 ### Scenario 1: Registered Car Entry
 1. Car approaches and is detected by LM393 sensor
 2. STM32 sends detection packet to Pi
-3. Pi captures plate image and recognizes the plate number
+3. Pi captures plate image, uses YOLOv8 to detect the license plate, and PaddleOCR to recognize the text
 4. Pi checks database and confirms plate is registered
 5. Pi sends commands to STM32 to display "Welcome" and open barrier
 6. Car passes through, sensor detects absence, barrier closes
@@ -156,7 +157,7 @@ Binary packet format:
 ### Scenario 2: Unregistered Car
 1. Car is detected by sensor
 2. STM32 sends detection packet to Pi
-3. Pi captures and recognizes plate number
+3. Pi captures image, processes it with YOLOv8 and PaddleOCR to extract plate number
 4. Pi checks database and finds plate is not registered
 5. Pi sends command to STM32 to display "Invalid Plate"
 6. Barrier remains closed
@@ -191,7 +192,7 @@ Binary packet format:
    - Verify UART packets are transmitted properly
 
 2. **License Plate Recognition**:
-   - Use sample plates to test webcam recognition
+   - Use sample plates to test webcam recognition with YOLOv8 and PaddleOCR
    - Test various lighting conditions and angles
 
 3. **Web Interface Testing**:
@@ -234,9 +235,9 @@ This project is for educational purposes only. Use in real environments requires
 
 ## Contributors
 
-- Your Name - Project Developer
+- freebee - Project Developer
 
 ## Acknowledgements
 
 - Reference materials and prior work from educational resources
-- Open source libraries: OpenCV, EasyOCR, Flask, u8g2
+- Open source libraries: YOLOv8, PaddleOCR, Flask, u8g2
